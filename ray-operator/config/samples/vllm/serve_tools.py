@@ -79,9 +79,9 @@ class VLLMDeployment:
                 chat_template=self.chat_template,
                 chat_template_content_format="auto",
                 enable_reasoning=os.getenv("ENABLE_REASONING", 'False').lower() in ('true', '1', 't', 'yes'),
-                reasoning_parser=os.getenv("REASONING_PARSER", None),
+                reasoning_parser=os.getenv("REASONING_PARSER", 'None'),
                 enable_auto_tools=os.getenv("ENABLE_AUTO_TOOL_CHOICE", 'False').lower() in ('true', '1', 't', 'yes'),
-                tool_parser=os.getenv("TOOL_CALL_PARSER", None),
+                tool_parser=os.getenv("TOOL_CALL_PARSER", 'None'),
             )
         logger.info(f"Request: {request}")
         generator = await self.openai_serving_chat.create_chat_completion(
