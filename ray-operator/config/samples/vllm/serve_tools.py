@@ -128,6 +128,7 @@ def build_app(cli_args: Dict[str, str]) -> serve.Application:
 
     engine_args = AsyncEngineArgs.from_cli_args(parsed_args)
     engine_args.worker_use_ray = True
+    engine_args.distributed_executor_backend = 'ray'
 
     logger.info(f"engine_args: {engine_args}")
 
