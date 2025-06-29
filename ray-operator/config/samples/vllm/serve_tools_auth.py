@@ -126,28 +126,26 @@ class VLLMDeployment:
             assert isinstance(generator, ChatCompletionResponse)
             return JSONResponse(content=generator.model_dump())
 
+    @app.get("/health")
+    async def health_check(self):
+        """Health check endpoint - no authentication required"""
+        return {"status": "healthy"}
 
-# Add a health check endpoint that doesn't require authentication
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
-
-# Add an endpoint to check if authentication is working
-@app.get("/v1/models")
-async def list_models(token: str = Depends(verify_token)):
-    """List available models - requires authentication"""
-    model_name = os.environ.get('MODEL_ID', 'unknown').split('/')[-1]
-    return {
-        "object": "list",
-        "data": [
-            {
-                "id": model_name,
-                "object": "model",
-                "created": 1677610602,
-                "owned_by": "vllm"
-            }
-        ]
-    }
+    @app.get("/v1/models")
+    async def list_models(self, token: str = Depends(verify_token)):
+        """List available models - requires authentication"""
+        model_name = os.environ.get('MODEL_ID', 'unknown').split('/')[-1]
+        return {
+            "object": "list",
+            "data": [
+                {
+                    "id": model_name,
+                    "object": "model",
+                    "created": 1677610602,
+                    "owned_by": "vllm"
+                }
+            ]
+        }
 
 def parse_vllm_args(cli_args: Dict[str, str]):
     arg_parser = FlexibleArgumentParser(
